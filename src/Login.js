@@ -1,20 +1,22 @@
-// src/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Login() {
+function Login({ closeModal }) {
     const [useremail, setUseremail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
         axios.post('http://localhost:5000/login', { useremail, password })
-            .then(() => alert("登入成功！"))
+            .then(() => {
+                alert("登入成功！");
+                closeModal();
+            })
             .catch(() => alert("帳號或密碼錯誤"));
     };
 
     return (
         <div>
-            <h1>登入</h1>
+            <h2>登入</h2>
             <input
                 type="text"
                 placeholder="用戶email"
