@@ -12,7 +12,7 @@ function App() {
     // 加載餐廳數據
     useEffect(() => {
         axios
-            .get('http://localhost:5000/restaurants')
+            .get('http://172.26.11.72:5000/restaurants')
             .then((response) => setRestaurants(response.data))
             .catch((error) => console.error('Error fetching restaurants:', error));
     }, []);

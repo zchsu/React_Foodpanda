@@ -6,7 +6,7 @@ function Login({ closeModal }) {
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
-        axios.post('http://localhost:5000/login', { useremail, password })
+        axios.post('http://172.26.11.72:5000/login', { useremail, password })
             .then(() => {
                 alert("登入成功！");
                 closeModal();
