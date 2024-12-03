@@ -129,7 +129,7 @@ function App() {
 
             {/* 縣市選擇區域 */}
             <div style={citySectionStyle}>
-                <h3>快速搜尋各縣市餐廳</h3>
+                <h3>我們有在您的城市提供送餐服務!</h3>
                 <div style={cityGridStyle}>
                     {cities.map((city) => (
                         <div
@@ -153,7 +153,7 @@ function App() {
 
             {/* 頁尾 */}
             <footer style={footerStyle}>
-                © 2024 foodpanda. All rights reserved.
+                © 2024 foodpanda. 軟體工程.
             </footer>
 
             {/* 浮動視窗 */}
@@ -271,14 +271,14 @@ const searchButtonStyle = {
 };
 
 const footerStyle = {
+    position: 'absolute',
     textAlign: 'center',
     backgroundColor: '#E21B70',
     color: '#fff',
     padding: '10px 0',
-    position: 'fixed',
-    bottom: 0,
     left: 0,
-    width: '100%',
+    right: 0,
+    marginTop: '50px',
 };
 
 const modalOverlayStyle = {
