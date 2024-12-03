@@ -48,5 +48,30 @@ def get_restaurants():
     restaurants = [{"name": row[0], "address": row[1], "description": row[2], "phone": row[3]} for row in result]
     return jsonify(restaurants)
 
+#搜尋餐廳
+@app.route('/restaurants/search', methods=['GET'])
+def search_restaurants():
+    address = request.args.get('address', '')
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT restaurant_name, restaurant_address, restaurant_desc, restaurant_phone FROM restaurant WHERE restaurant_address LIKE %s", ('%' + address + '%',))
+    result = cursor.fetchall()
+    restaurants = [{"name": row[0], "address": row[1], "description": row[2], "phone": row[3]} for row in result]
+    return jsonify(restaurants)
+
+#獲取菜單
+@app.route('/menu', methods=['GET'])
+def get_menu():
+    restaurant_name = request.args.get('restaurant_name')
+    cursor = mysql.connection.cursor()
+    cursor.execute(
+        "SELECT meal_name, meal_price, meal_desc FROM menu WHERE restaurant_name = %s",
+        (restaurant_name,)
+    )
+    result = cursor.fetchall()
+    menu_items = [{"meal_name": row[0], "meal_price": row[1], "meal_desc": row[2]} for row in result]
+    return jsonify(menu_items)
+
+
 if __name__ == '__main__':
+    #app.run(host='172.20.10.4', port=5000 , debug=True)
     app.run(debug=True)

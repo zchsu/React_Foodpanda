@@ -2,26 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Register from './Register';
 import Login from './Login';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
     const [restaurants, setRestaurants] = useState([]);
     const [search, setSearch] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalType, setModalType] = useState(''); // 'login' 或 'register'
+    const [modalType, setModalType] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
-    // 加載餐廳數據
-    useEffect(() => {
-        axios
-            .get('http://localhost:5000/restaurants')
-            .then((response) => setRestaurants(response.data))
-            .catch((error) => console.error('Error fetching restaurants:', error));
-    }, []);
-
-    // 篩選餐廳
-    const filteredRestaurants = restaurants.filter((restaurant) =>
-        restaurant.name.toLowerCase().includes(search.toLowerCase())
-    );
-
+    // 開啟註冊或登入視窗
     const handleOpenModal = (type) => {
         setModalType(type);
         setShowModal(true);
@@ -30,6 +21,22 @@ function App() {
     const handleCloseModal = () => {
         setShowModal(false);
         setModalType('');
+    };
+
+    // 搜尋餐廳
+    const handleSearchRestaurants = () => {
+        if (!search) return; // 如果沒有輸入地址，則不發送請求
+        setIsLoading(true); // 顯示加載狀態
+        axios
+            .get(`http://localhost:5000/restaurants/search?address=${search}`)
+            .then((response) => {
+                setRestaurants(response.data);
+                setIsLoading(false); // 停止加載狀態
+            })
+            .catch((error) => {
+                console.error('Error searching restaurants:', error);
+                setIsLoading(false); // 停止加載狀態
+            });
     };
 
     return (
@@ -59,26 +66,40 @@ function App() {
                                 onChange={(e) => setSearch(e.target.value)}
                                 style={searchInputStyle}
                             />
-                            <button style={searchButtonStyle}>搜尋美食</button>
+                            <button onClick={handleSearchRestaurants} style={searchButtonStyle}>
+                                搜尋美食
+                            </button>
                         </div>
                     </div>
-                    <div>
-                        {filteredRestaurants.map((restaurant) => (
-                            <div
-                                key={restaurant.id}
-                                style={{
-                                    borderBottom: '1px solid #ccc',
-                                    margin: '10px 0',
-                                    padding: '10px',
-                                }}
-                            >
-                                <h2>{restaurant.name}</h2>
-                                <p>描述: {restaurant.description}</p>
-                                <p>地址: {restaurant.address}</p>
-                                <p>電話: {restaurant.phone}</p>
-                            </div>
-                        ))}
-                    </div>
+                    {/* 顯示搜尋結果 */}
+                    {isLoading ? (
+                        <p>正在加載...</p>
+                    ) : (
+                        <div>
+                            {restaurants.length > 0 ? (
+                                restaurants.map((restaurant) => (
+                                    <div
+                                        key={restaurant.name}
+                                        onClick={() => navigate(`/menu/${restaurant.name}`)} // 點擊跳轉
+                                        style={{
+                                            borderBottom: '1px solid #ccc',
+                                            margin: '10px 0',
+                                            padding: '10px',
+                                            cursor: 'pointer', // 鼠標變成手型
+                                        }}
+                                        
+                                    >
+                                        <h2>{restaurant.name}</h2>
+                                        <p>描述: {restaurant.description}</p>
+                                        <p>地址: {restaurant.address}</p>
+                                        <p>電話: {restaurant.phone}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>找不到餐廳</p>
+                            )}
+                        </div>
+                    )}
                 </div>
             </main>
 
@@ -112,7 +133,6 @@ const headerStyle = {
     top: 0,
     left: 0,
     width: '100%',
-    display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#E21B70',
@@ -127,6 +147,9 @@ const logoStyle = {
 };
 
 const buttonGroupStyle = {
+    position: 'absolute',
+    top: '25px',
+    right: '50px',
     display: 'flex',
     gap: '10px',
 };
@@ -160,6 +183,7 @@ const contentStyle = {
 
 const backgroundStyle = {
     position: 'relative',
+    left: 0,
     width: '100%',
     minHeight: '350px',
     backgroundColor: '#f7f7f7',
@@ -205,6 +229,7 @@ const footerStyle = {
     padding: '10px 0',
     position: 'fixed',
     bottom: 0,
+    left: 0,
     width: '100%',
 };
 
