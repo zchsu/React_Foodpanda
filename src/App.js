@@ -39,6 +39,30 @@ function App() {
             });
     };
 
+    const cities = [
+        { name: '台北市', image: '/images/台北市.png' },
+        { name: '新北市', image: '/images/新北市.png' },
+        { name: '桃園市', image: '/images/桃園市.png' },
+        { name: '台中市', image: '/images/台中市.png' },
+        { name: '台南市', image: '/images/台南市.png' },
+        { name: '高雄市', image: '/images/高雄市.png' },
+        { name: '基隆市', image: '/images/基隆市.png' },
+        { name: '新竹市', image: '/images/新竹市.png' },
+        { name: '嘉義市', image: '/images/嘉義市.png' },
+        { name: '新竹縣', image: '/images/新竹縣.png' },
+        { name: '苗栗縣', image: '/images/苗栗縣.png' },
+        { name: '彰化縣', image: '/images/彰化縣.png' },
+        { name: '南投縣', image: '/images/南投縣.png' },
+        { name: '雲林縣', image: '/images/雲林縣.png' },
+        { name: '嘉義縣', image: '/images/嘉義縣.png' },
+        { name: '屏東縣', image: '/images/屏東縣.png' },
+        { name: '宜蘭縣', image: '/images/宜蘭縣.png' },
+        { name: '花蓮縣', image: '/images/花蓮縣.png' },
+        { name: '台東縣', image: '/images/台東縣.png' },
+        { name: '澎湖縣', image: '/images/澎湖縣.png' },
+    ];
+    
+
     return (
         <div>
             {/* 頁頭 */}
@@ -102,6 +126,30 @@ function App() {
                     )}
                 </div>
             </main>
+
+            {/* 縣市選擇區域 */}
+            <div style={citySectionStyle}>
+                <h3>快速搜尋各縣市餐廳</h3>
+                <div style={cityGridStyle}>
+                    {cities.map((city) => (
+                        <div
+                            key={city.name}
+                            onClick={() => {
+                                setSearch(city.name); // 更新搜尋欄位
+                                handleSearchRestaurants(); // 執行搜尋
+                            }}
+                            style={cityCardStyle}
+                        >
+                            <img
+                                src={city.image}
+                                alt={city.name}
+                                style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+                            />
+                            <p>{city.name}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             {/* 頁尾 */}
             <footer style={footerStyle}>
@@ -264,5 +312,37 @@ const closeButtonStyle = {
     fontSize: '16px',
     cursor: 'pointer',
 };
+
+const citySectionStyle = {
+    marginTop: '30px',
+    textAlign: 'center',
+};
+
+const cityGridStyle = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: '20px',
+    marginTop: '20px',
+};
+
+const cityCardStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    cursor: 'pointer',
+    textAlign: 'center',
+    padding: '10px',
+    border: '1px solid #ccc',
+    borderRadius: '10px',
+    width: '120px',
+    transition: 'transform 0.3s, box-shadow 0.3s',
+};
+
+cityCardStyle[':hover'] = {
+    transform: 'scale(1.05)',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+};
+
 
 export default App;
