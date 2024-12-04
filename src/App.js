@@ -3,7 +3,7 @@ import axios from 'axios';
 import Register from './Register';
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
-import './App.css'
+import './App.css'; // 匯入外部樣式
 
 const hostServer = '172.26.11.72:5000';
 
@@ -14,33 +14,6 @@ function App() {
     const [modalType, setModalType] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-
-    // 開啟註冊或登入視窗
-    const handleOpenModal = (type) => {
-        setModalType(type);
-        setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setModalType('');
-    };
-
-    // 搜尋餐廳
-    const handleSearchRestaurants = () => {
-        if (!search) return; // 如果沒有輸入地址，則不發送請求
-        setIsLoading(true); // 顯示加載狀態
-        axios
-            .get(`http://${hostServer}/restaurants/search?address=${search}`)
-            .then((response) => {
-                setRestaurants(response.data);
-                setIsLoading(false); // 停止加載狀態
-            })
-            .catch((error) => {
-                console.error('Error searching restaurants:', error);
-                setIsLoading(false); // 停止加載狀態
-            });
-    };
 
     const cities = [
         { name: '台北市', image: '/images/台北市.png' },
@@ -64,41 +37,61 @@ function App() {
         { name: '台東縣', image: '/images/台東縣.png' },
         { name: '澎湖縣', image: '/images/澎湖縣.png' },
     ];
-    
+
+    const handleOpenModal = (type) => {
+        setModalType(type);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setModalType('');
+    };
+
+    const handleSearchRestaurants = () => {
+        if (!search) return;
+        setIsLoading(true);
+        axios
+            .get(`http://${hostServer}/restaurants/search?address=${search}`)
+            .then((response) => {
+                setRestaurants(response.data);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                console.error('Error searching restaurants:', error);
+                setIsLoading(false);
+            });
+    };
 
     return (
         <div>
-            {/* 頁頭 */}
-            <header className="header">
-                <h1 className="logo">foodpanda</h1>
+            {/* Header */}
+            <header>
+                <h1>foodpanda</h1>
                 <div className="button-group">
-                    <button onClick={() => handleOpenModal('login')} className="login-button">
+                    <button className="login-button" onClick={() => handleOpenModal('login')}>
                         登入
                     </button>
-                    <button onClick={() => handleOpenModal('register')} className="register-button">
+                    <button className="register-button" onClick={() => handleOpenModal('register')}>
                         註冊
                     </button>
                 </div>
             </header>
 
-            {/* 主頁內容 */}
-            <main style={mainStyle}>
-                <div style={contentStyle}>
-                    <div style={backgroundStyle}>
-                        <div style={searchContainerStyle}>
+            {/* Main */}
+            <main>
+                <div className="content">
+                    <div className="background">
+                        <div className="search-container">
                             <input
                                 type="text"
                                 placeholder="輸入你欲送達的地址"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                style={searchInputStyle}
                             />
-                            <button onClick={handleSearchRestaurants} style={searchButtonStyle}>
-                                搜尋美食
-                            </button>
+                            <button onClick={handleSearchRestaurants}>搜尋美食</button>
                         </div>
                     </div>
-                    {/* 顯示搜尋結果 */}
                     {isLoading ? (
                         <p>正在加載...</p>
                     ) : (
@@ -107,14 +100,8 @@ function App() {
                                 restaurants.map((restaurant) => (
                                     <div
                                         key={restaurant.name}
-                                        onClick={() => navigate(`/menu/${restaurant.name}`)} // 點擊跳轉
-                                        style={{
-                                            borderBottom: '1px solid #ccc',
-                                            margin: '10px 0',
-                                            padding: '10px',
-                                            cursor: 'pointer', // 鼠標變成手型
-                                        }}
-                                        
+                                        onClick={() => navigate(`/menu/${restaurant.name}`)}
+                                        className="restaurant-item"
                                     >
                                         <h2>{restaurant.name}</h2>
                                         <p>描述: {restaurant.description}</p>
@@ -130,40 +117,34 @@ function App() {
                 </div>
             </main>
 
-            {/* 縣市選擇區域 */}
-            <div style={citySectionStyle}>
+            {/* Cities */}
+            <div className="city-section">
                 <h3>我們有在您的城市提供送餐服務!</h3>
-                <div style={cityGridStyle}>
+                <div className="city-grid">
                     {cities.map((city) => (
                         <div
                             key={city.name}
+                            className="city-card"
                             onClick={() => {
-                                setSearch(city.name); // 更新搜尋欄位
-                                handleSearchRestaurants(); // 執行搜尋
+                                setSearch(city.name);
+                                handleSearchRestaurants();
                             }}
-                            style={cityCardStyle}
                         >
-                            <img
-                                src={city.image}
-                                alt={city.name}
-                                style={{ width: '100px', height: '100px', borderRadius: '50%' }}
-                            />
+                            <img src={city.image} alt={city.name} />
                             <p>{city.name}</p>
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* 頁尾 */}
-            <footer style={footerStyle}>
-                © 2024 foodpanda. 軟體工程.
-            </footer>
+            {/* Footer */}
+            <footer>© 2024 foodpanda. 軟體工程.</footer>
 
-            {/* 浮動視窗 */}
+            {/* Modal */}
             {showModal && (
-                <div style={modalOverlayStyle}>
-                    <div style={modalContentStyle}>
-                        <button style={closeButtonStyle} onClick={handleCloseModal}>
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <button className="close-button" onClick={handleCloseModal}>
                             ✕
                         </button>
                         {modalType === 'login' ? (
@@ -177,132 +158,5 @@ function App() {
         </div>
     );
 }
-
-// 樣式
-
-const mainStyle = {
-    paddingTop: '80px',
-    padding: '20px',
-};
-
-const contentStyle = {
-    textAlign: 'center',
-};
-
-const backgroundStyle = {
-    position: 'relative',
-    left: 0,
-    width: '100%',
-    minHeight: '350px',
-    backgroundColor: '#f7f7f7',
-    backgroundImage: 'url(/images/homepage.png)', // 請確認圖片路徑正確
-    backgroundSize: 'contain',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'right center',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-};
-
-const searchContainerStyle = {
-    flex: 1,
-    padding: '20px',
-    maxWidth: '800px',
-};
-
-const searchInputStyle = {
-    flex: 1,
-    padding: '10px',
-    borderRadius: '20px',
-    border: '1px solid #ccc',
-    fontSize: '16px',
-    outline: 'none',
-    width: '60%',
-};
-
-const searchButtonStyle = {
-    backgroundColor: '#E21B70',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '20px',
-    padding: '10px 20px',
-    fontSize: '16px',
-    cursor: 'pointer',
-};
-
-const footerStyle = {
-    position: 'absolute',
-    textAlign: 'center',
-    backgroundColor: '#E21B70',
-    color: '#fff',
-    padding: '10px 0',
-    left: 0,
-    right: 0,
-    marginTop: '50px',
-};
-
-const modalOverlayStyle = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1001,
-};
-
-const modalContentStyle = {
-    backgroundColor: '#fff',
-    padding: '20px',
-    borderRadius: '10px',
-    maxWidth: '400px',
-    width: '100%',
-    position: 'relative',
-};
-
-const closeButtonStyle = {
-    position: 'absolute',
-    top: '10px',
-    right: '10px',
-    backgroundColor: 'transparent',
-    border: 'none',
-    fontSize: '16px',
-    cursor: 'pointer',
-};
-
-const citySectionStyle = {
-    marginTop: '30px',
-    textAlign: 'center',
-};
-
-const cityGridStyle = {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: '20px',
-    marginTop: '20px',
-};
-
-const cityCardStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    cursor: 'pointer',
-    textAlign: 'center',
-    padding: '10px',
-    border: '1px solid #ccc',
-    borderRadius: '10px',
-    width: '120px',
-    transition: 'transform 0.3s, box-shadow 0.3s',
-};
-
-cityCardStyle[':hover'] = {
-    transform: 'scale(1.05)',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-};
-
 
 export default App;
