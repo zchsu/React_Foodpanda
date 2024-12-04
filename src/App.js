@@ -73,18 +73,13 @@ function App() {
                     console.log('User location:', { latitude, longitude });
     
                     // Call the reverse geocoding API to get the address
-                    const apiKey = 'AIzaSyAFsDAifUDGbzyqqHhf5p415ZvHCPacJZY';  // Replace with your API key
-                    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+                    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
     
                     axios
                         .get(url)
                         .then((response) => {
-                            if (response.data.status === 'OK') {
-                                const address = response.data.results[0].formatted_address;
-                                console.log('User address:', address);
-                            } else {
-                                console.error('Failed to get address:', response.data.status);
-                            }
+                            const address = response.data.display_name; // Correct way to access the address
+                            console.log('User address:', address);
                         })
                         .catch((error) => {
                             console.error('Error with reverse geocoding:', error);
