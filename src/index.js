@@ -1,10 +1,10 @@
-// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import App from './App';
 import Register from './Register';
 import Login from './Login';
+import Menu from './Menu'; // 新增
 
 ReactDOM.render(
     <Router>
@@ -12,6 +12,7 @@ ReactDOM.render(
             <Route path="/" element={<App />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/menu/:restaurantName" element={<Menu />} /> {/* 新增路由 */}
         </Routes>
     </Router>,
     document.getElementById('root')
