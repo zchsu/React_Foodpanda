@@ -78,7 +78,9 @@ function App() {
                     axios
                         .get(url)
                         .then((response) => {
-                            const address = response.data.display_name; // Correct way to access the address
+                            
+                            const address = response.data.address.city+response.data.address.town+response.data.address.road; // Correct way to access the address
+
                             console.log('User address:', address);
                         })
                         .catch((error) => {
