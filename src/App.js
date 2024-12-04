@@ -4,6 +4,8 @@ import Register from './Register';
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 
+const hostServer = '172.26.11.72:5000';
+
 function App() {
     const [restaurants, setRestaurants] = useState([]);
     const [search, setSearch] = useState('');
@@ -28,7 +30,7 @@ function App() {
         if (!search) return; // 如果沒有輸入地址，則不發送請求
         setIsLoading(true); // 顯示加載狀態
         axios
-            .get(`http://localhost:5000/restaurants/search?address=${search}`)
+            .get(`http://${hostServer}/restaurants/search?address=${search}`)
             .then((response) => {
                 setRestaurants(response.data);
                 setIsLoading(false); // 停止加載狀態
