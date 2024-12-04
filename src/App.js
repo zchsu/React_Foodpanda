@@ -13,6 +13,7 @@ function App() {
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [location, setLocation] = useState(null); // Store user's location
     const navigate = useNavigate();
 
     const cities = [
@@ -61,6 +62,41 @@ function App() {
                 console.error('Error searching restaurants:', error);
                 setIsLoading(false);
             });
+    };
+
+    const getlocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setLocation({ latitude, longitude });
+                    console.log('User location:', { latitude, longitude });
+    
+                    // Call the reverse geocoding API to get the address
+                    const apiKey = 'AIzaSyAFsDAifUDGbzyqqHhf5p415ZvHCPacJZY';  // Replace with your API key
+                    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+    
+                    axios
+                        .get(url)
+                        .then((response) => {
+                            if (response.data.status === 'OK') {
+                                const address = response.data.results[0].formatted_address;
+                                console.log('User address:', address);
+                            } else {
+                                console.error('Failed to get address:', response.data.status);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error with reverse geocoding:', error);
+                        });
+                },
+                (error) => {
+                    console.error('Error getting location:', error);
+                }
+            );
+        } else {
+            console.log('Geolocation is not supported by this browser.');
+        }
     };
 
     return (
@@ -155,6 +191,7 @@ function App() {
                     </div>
                 </div>
             )}
+            <button onClick={getlocation}>Location</button>
         </div>
     );
 }
