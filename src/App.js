@@ -3,6 +3,7 @@ import axios from 'axios';
 import Register from './Register';
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
+import './App.css'
 
 const hostServer = '172.26.11.72:5000';
 
@@ -68,13 +69,13 @@ function App() {
     return (
         <div>
             {/* 頁頭 */}
-            <header style={headerStyle}>
-                <h1 style={logoStyle}>foodpanda</h1>
-                <div style={buttonGroupStyle}>
-                    <button onClick={() => handleOpenModal('login')} style={loginButtonStyle}>
+            <header className="header">
+                <h1 className="logo">foodpanda</h1>
+                <div className="button-group">
+                    <button onClick={() => handleOpenModal('login')} className="login-button">
                         登入
                     </button>
-                    <button onClick={() => handleOpenModal('register')} style={registerButtonStyle}>
+                    <button onClick={() => handleOpenModal('register')} className="register-button">
                         註冊
                     </button>
                 </div>
@@ -178,49 +179,6 @@ function App() {
 }
 
 // 樣式
-const headerStyle = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#E21B70',
-    padding: '10px 20px',
-    zIndex: 1000,
-};
-
-const logoStyle = {
-    color: '#fff',
-    fontSize: '24px',
-    fontWeight: 'bold',
-};
-
-const buttonGroupStyle = {
-    position: 'absolute',
-    top: '25px',
-    right: '50px',
-    display: 'flex',
-    gap: '10px',
-};
-
-const loginButtonStyle = {
-    backgroundColor: 'transparent',
-    border: '1px solid #fff',
-    borderRadius: '20px',
-    color: '#fff',
-    padding: '5px 15px',
-    cursor: 'pointer',
-};
-
-const registerButtonStyle = {
-    backgroundColor: '#fff',
-    border: 'none',
-    borderRadius: '20px',
-    color: '#E21B70',
-    padding: '5px 15px',
-    cursor: 'pointer',
-};
 
 const mainStyle = {
     paddingTop: '80px',

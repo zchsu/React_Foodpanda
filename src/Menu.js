@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './App.css'
+
+const hostServer = '172.26.11.72:5000';
 
 function Menu() {
     const { restaurantName } = useParams(); // 獲取餐廳名稱參數
@@ -10,7 +13,7 @@ function Menu() {
     useEffect(() => {
         // 從後端獲取菜單資料
         axios
-            .get(`http://localhost:5000/menu?restaurant_name=${restaurantName}`)
+            .get(`http://${hostServer}/menu?restaurant_name=${restaurantName}`)
             .then((response) => setMenuItems(response.data))
             .catch((error) => console.error('Error fetching menu:', error));
     }, [restaurantName]);

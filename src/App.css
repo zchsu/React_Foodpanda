@@ -36,3 +36,46 @@
     transform: rotate(360deg);
   }
 }
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #E21B70;
+  padding: 10px 20px;
+  z-index: 1000;
+}
+
+.logo {
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.login-button {
+  background-color: transparent;
+  border: 1px solid #fff;
+  border-radius: 20px;
+  color: #fff;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.register-button {
+  background-color: #fff;
+  border: none;
+  border-radius: 20px;
+  color: #E21B70;
+  padding: 5px 15px;
+  cursor: pointer;
+}
