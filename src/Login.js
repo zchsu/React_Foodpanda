@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Login({ closeModal }) {
+function Login({ closeModal, setUser }) {
     const [useremail, setUseremail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
-        axios.post('http://172.26.11.72:5000/login', { useremail, password })
+        axios.post('http://192.168.1.121:5000/login', { useremail, password })
             .then(() => {
                 alert("登入成功！");
+                setUser(useremail); // 設定使用者狀態
                 closeModal();
             })
             .catch(() => alert("帳號或密碼錯誤"));

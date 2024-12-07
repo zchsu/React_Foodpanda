@@ -89,6 +89,20 @@ def add_to_cart():
     mysql.connection.commit()
     return jsonify({"message": "Added to cart successfully"}), 201
 
+# 獲取用戶購物車
+@app.route('/cart', methods=['GET'])
+def get_cart():
+    user_email = request.args.get('user_email')
+    cursor = mysql.connection.cursor()
+    cursor.execute(
+        "SELECT meal_name, amount, content FROM cart WHERE user_email = %s",
+        (user_email,)
+    )
+    result = cursor.fetchall()
+    cart_items = [{"meal_name": row[0], "amount": row[1], "content": row[2]} for row in result]
+    return jsonify(cart_items)
+
+
 if __name__ == '__main__':
-    app.run(host='172.26.11.72', port=5000 , debug=True)
+    app.run(host='192.168.1.121', port=5000 , debug=True)
     #app.run(debug=True)

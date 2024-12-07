@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Menu.css';
 
-const hostServer = '172.26.11.72:5000';
+const hostServer = '192.168.1.121:5000';
 
 function Menu() {
     const { restaurantName } = useParams(); // 獲取餐廳名稱參數
@@ -12,6 +12,7 @@ function Menu() {
     const [selectedMeal, setSelectedMeal] = useState(null);
     const [amount, setAmount] = useState(1);
     const [content, setContent] = useState('');
+    const [cartItems, setCartItems] = useState([]); // 新增的購物車狀態
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,6 +40,7 @@ function Menu() {
             })
             .then(() => {
                 alert('已成功加入購物車！');
+                setCartItems([...cartItems, { ...selectedMeal, amount, content }]); // 更新購物車
                 setShowModal(false);
                 setAmount(1);
                 setContent('');
@@ -49,39 +51,59 @@ function Menu() {
             });
     };
 
-    return (
-        <div>
-            {/* Header */}
-            <header>
-                <h1>foodpanda</h1>
-                <button onClick={() => navigate('/cart')} className="cart-button">
-                    購物車
-                </button>
-            </header>
+    const calculateTotal = () => {
+        return cartItems.reduce((total, item) => total + item.meal_price * item.amount, 0);
+    };
 
+    return (
+        <div className="menu-page">
             {/* Main Content */}
-            <main>
-                <h2>{restaurantName} 的菜單</h2>
-                {menuItems.length > 0 ? (
-                    <ul className="menu-list">
-                        {menuItems.map((item) => (
-                            <li key={item.meal_name} className="menu-item">
-                                <h3>{item.meal_name}</h3>
-                                <p>描述: {item.meal_desc}</p>
-                                <p>價格: ${item.meal_price}</p>
-                                <button
-                                    className="add-to-cart"
-                                    onClick={() => handleAddToCart(item)}
-                                >
-                                    加入購物車
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>目前沒有可用的菜單項目。</p>
-                )}
-            </main>
+            <div className="menu-container">
+                {/* 左側菜單 */}
+                <div className="menu-list-container">
+                    <h2>{restaurantName} 的菜單</h2>
+                    {menuItems.length > 0 ? (
+                        <ul className="menu-list">
+                            {menuItems.map((item) => (
+                                <li key={item.meal_name} className="menu-item">
+                                    <h3>{item.meal_name}</h3>
+                                    <p>描述: {item.meal_desc}</p>
+                                    <p>價格: ${item.meal_price}</p>
+                                    <button
+                                        className="add-to-cart"
+                                        onClick={() => handleAddToCart(item)}
+                                    >
+                                        加入購物車
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>目前沒有可用的菜單項目。</p>
+                    )}
+                </div>
+
+                {/* 右側購物車 */}
+                <div className="cart-container">
+                    <h2>購物車</h2>
+                    {cartItems.length > 0 ? (
+                        <div>
+                            <ul className="cart-list">
+                                {cartItems.map((item, index) => (
+                                    <li key={index} className="cart-item">
+                                        <p>{item.meal_name}</p>
+                                        <p>數量: {item.amount}</p>
+                                        <p>小計: ${item.meal_price * item.amount}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                            <h3>總金額: ${calculateTotal()}</h3>
+                        </div>
+                    ) : (
+                        <p>您的購物車是空的。</p>
+                    )}
+                </div>
+            </div>
 
             {/* Footer */}
             <footer>© 2024 foodpanda. All rights reserved.</footer>

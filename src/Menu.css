@@ -94,3 +94,54 @@ footer {
     border-radius: 5px;
     cursor: pointer;
 }
+
+.menu-page {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.menu-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.menu-list-container {
+    width: 65%;
+}
+
+.cart-container {
+    width: 30%;
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.menu-item, .cart-item {
+    margin-bottom: 15px;
+}
+
+.cart-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.add-to-cart {
+    background-color: #00796b;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.add-to-cart:hover {
+    background-color: #004d40;
+}
+
+h3, h2 {
+    margin: 10px 0;
+}
+
+

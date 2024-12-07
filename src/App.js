@@ -14,6 +14,7 @@ function App() {
     const [modalType, setModalType] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [location, setLocation] = useState(null); 
+    const [user, setUser] = useState(null); // 新增登入狀態
     const navigate = useNavigate();
 
     const cities = [
@@ -91,7 +92,16 @@ function App() {
             console.log('Geolocation is not supported by this browser.');
         }
     };
-    
+
+    const handleNavigateToMenu = (restaurantName) => {
+        if (!user) {
+            alert("請先登入！");
+            setShowModal(true);
+            setModalType('login');
+            return;
+        }
+        navigate(`/menu/${restaurantName}`);
+    };
 
     return (
         <div>
@@ -99,12 +109,18 @@ function App() {
             <header>
                 <h1>foodpanda</h1>
                 <div className="button-group">
-                    <button className="login-button" onClick={() => handleOpenModal('login')}>
-                        登入
-                    </button>
-                    <button className="register-button" onClick={() => handleOpenModal('register')}>
-                        註冊
-                    </button>
+                    {user ? (
+                        <p>Hi, {user}</p>
+                    ) : (
+                        <>
+                            <button className="login-button" onClick={() => handleOpenModal('login')}>
+                                登入
+                            </button>
+                            <button className="register-button" onClick={() => handleOpenModal('register')}>
+                                註冊
+                            </button>
+                        </>
+                    )}
                 </div>
             </header>
 
@@ -135,7 +151,7 @@ function App() {
                                 restaurants.map((restaurant) => (
                                     <div
                                         key={restaurant.name}
-                                        onClick={() => navigate(`/menu/${restaurant.name}`)}
+                                        onClick={() => handleNavigateToMenu(restaurant.name)}
                                         className="restaurant-item"
                                     >
                                         <h2>{restaurant.name}</h2>
@@ -184,7 +200,7 @@ function App() {
                             ✕
                         </button>
                         {modalType === 'login' ? (
-                            <Login closeModal={handleCloseModal} />
+                            <Login closeModal={handleCloseModal} setUser={setUser} />
                         ) : (
                             <Register closeModal={handleCloseModal} />
                         )}
