@@ -3,9 +3,9 @@ import axios from 'axios';
 import Register from './Register';
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
-import './App.css'; // 匯入外部樣式
+import './App.css';
 
-const hostServer = '172.26.11.72:5000';
+const hostServer = '192.168.1.121:5000';
 
 function App() {
     const [restaurants, setRestaurants] = useState([]);
@@ -13,7 +13,7 @@ function App() {
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [location, setLocation] = useState(null); // Store user's location
+    const [location, setLocation] = useState(null); 
     const navigate = useNavigate();
 
     const cities = [
@@ -70,18 +70,14 @@ function App() {
                 (position) => {
                     const { latitude, longitude } = position.coords;
                     setLocation({ latitude, longitude });
-                    console.log('User location:', { latitude, longitude });
     
-                    // Call the reverse geocoding API to get the address
                     const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
-    
                     axios
                         .get(url)
                         .then((response) => {
-                            
-                            const address = response.data.address.city+response.data.address.town+response.data.address.road; // Correct way to access the address
-
+                            const address = `${response.data.address.city || ''}${response.data.address.town || ''}${response.data.address.road || ''}`;
                             console.log('User address:', address);
+                            setSearch(address); // 設定輸入框內容
                         })
                         .catch((error) => {
                             console.error('Error with reverse geocoding:', error);
@@ -95,6 +91,7 @@ function App() {
             console.log('Geolocation is not supported by this browser.');
         }
     };
+    
 
     return (
         <div>
@@ -116,14 +113,19 @@ function App() {
                 <div className="content">
                     <div className="background">
                         <div className="search-container">
-                            <input
-                                type="text"
-                                placeholder="輸入你欲送達的地址"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
+                            <div className="search-input-wrapper">
+                                <input
+                                  type="text"
+                                  placeholder="輸入你欲送達的地址"
+                                  value={search}
+                                  onChange={(e) => setSearch(e.target.value)}
+                                />
+                                <button className="location-button" onClick={getlocation}>📍</button>
+                                
+                            </div>
                             <button onClick={handleSearchRestaurants}>搜尋美食</button>
                         </div>
+
                     </div>
                     {isLoading ? (
                         <p>正在加載...</p>
@@ -171,7 +173,8 @@ function App() {
             </div>
 
             {/* Footer */}
-            <footer>© 2024 foodpanda. 軟體工程.</footer>
+            
+            <div className="footer-content">© 2024 foodpanda. 軟體工程</div>
 
             {/* Modal */}
             {showModal && (
@@ -188,7 +191,6 @@ function App() {
                     </div>
                 </div>
             )}
-            <button onClick={getlocation}>Location</button>
         </div>
     );
 }
