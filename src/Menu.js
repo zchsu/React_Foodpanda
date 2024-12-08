@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Menu.css';
 
-const hostServer = '192.168.1.121:5000';
+const hostServer = '172.26.11.72:5000';
 
 function Menu() {
     const { restaurantName } = useParams();
@@ -17,6 +17,7 @@ function Menu() {
     const [cartItems, setCartItems] = useState([]);
     const [deliveryOption, setDeliveryOption] = useState('delivery');
     const [needUtensils, setNeedUtensils] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios
@@ -129,9 +130,14 @@ function Menu() {
                                 checked={needUtensils}
                                 onChange={(e) => setNeedUtensils(e.target.checked)}
                             />
-                            需要餐具
+                            需要餐具<br></br><br></br>
                         </label>
-                        <button className="checkout-button">查看付款方式及地址</button>
+                        <button 
+                            className="checkout-button"
+                            onClick={() =>
+                                navigate('/payment', { state: { cartItems } })
+                            }
+                        >查看付款方式及地址</button>
                     </div>
                 </div>
             </div>

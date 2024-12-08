@@ -5,7 +5,7 @@ import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 
-const hostServer = '192.168.1.121:5000';
+const hostServer = '172.26.11.72:5000';
 
 function App() {
     const [restaurants, setRestaurants] = useState([]);
@@ -27,17 +27,14 @@ function App() {
         { name: '基隆市', image: '/images/基隆市.png' },
         { name: '新竹市', image: '/images/新竹市.png' },
         { name: '嘉義市', image: '/images/嘉義市.png' },
-        { name: '新竹縣', image: '/images/新竹縣.png' },
-        { name: '苗栗縣', image: '/images/苗栗縣.png' },
-        { name: '彰化縣', image: '/images/彰化縣.png' },
-        { name: '南投縣', image: '/images/南投縣.png' },
+        { name: '苗栗市', image: '/images/苗栗市.png' },
+        { name: '彰化市', image: '/images/彰化市.png' },
+        { name: '南投市', image: '/images/南投市.png' },
         { name: '雲林縣', image: '/images/雲林縣.png' },
-        { name: '嘉義縣', image: '/images/嘉義縣.png' },
         { name: '屏東縣', image: '/images/屏東縣.png' },
         { name: '宜蘭縣', image: '/images/宜蘭縣.png' },
         { name: '花蓮縣', image: '/images/花蓮縣.png' },
-        { name: '台東縣', image: '/images/台東縣.png' },
-        { name: '澎湖縣', image: '/images/澎湖縣.png' },
+        { name: '台東市', image: '/images/台東市.png' },
     ];
 
     const handleOpenModal = (type) => {

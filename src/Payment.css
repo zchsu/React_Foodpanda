@@ -1,0 +1,136 @@
+/* Payment.css */
+
+/* 整體頁面樣式 */
+.payment-page {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 0 auto; /* 讓內容置中 */
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+/* 標題樣式 */
+.payment-page h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #e21b70;
+}
+
+/* 地址區塊樣式 */
+.address-section {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.address-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.address-section p {
+    margin: 0 0 10px;
+    font-size: 1rem;
+    color: #555;
+}
+
+.edit-address {
+    display: inline-block;
+    background-color: #e21b70;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.edit-address:hover {
+    background-color: #b71b5e;
+}
+
+/* 訂單摘要樣式 */
+.cart-summary {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cart-summary h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.cart-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cart-summary li {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+    font-size: 0.95rem;
+}
+
+.cart-summary h4 {
+    text-align: right;
+    font-size: 1.2rem;
+    color: #e21b70;
+    margin-top: 10px;
+}
+
+/* 付款方式區塊 */
+.payment-method {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.payment-method h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.payment-method label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.payment-method input[type="radio"] {
+    margin-right: 10px;
+}
+
+/* 確認按鈕 */
+.confirm-button {
+    display: block;
+    width: 100%;
+    background-color: #e21b70;
+    color: #fff;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.confirm-button:hover {
+    background-color: #b71b5e;
+    transform: scale(1.02);
+}
