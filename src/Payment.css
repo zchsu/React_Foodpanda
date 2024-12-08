@@ -134,3 +134,27 @@
     background-color: #b71b5e;
     transform: scale(1.02);
 }
+
+/* 配送方式區塊 */
+.delivery-option-section,
+.utensils-section {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #ffffff;
+}
+
+.delivery-option-section h3,
+.utensils-section h3 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.delivery-option-section p,
+.utensils-section p {
+    font-size: 1em;
+    color: #666;
+    margin: 0;
+}

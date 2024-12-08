@@ -102,7 +102,38 @@ def get_cart():
     cart_items = [{"meal_name": row[0], "amount": row[1], "content": row[2]} for row in result]
     return jsonify(cart_items)
 
+# 更新購物車商品數量
+@app.route('/cart/update', methods=['PUT'])
+def update_cart_item():
+    data = request.json
+    user_email = data['user_email']
+    meal_name = data['meal_name']
+    amount = data['amount']
+
+    cursor = mysql.connection.cursor()
+    cursor.execute(
+        "UPDATE cart SET amount = %s WHERE user_email = %s AND meal_name = %s",
+        (amount, user_email, meal_name)
+    )
+    mysql.connection.commit()
+    return jsonify({"message": "Cart item updated successfully"}), 200
+
+# 刪除購物車商品
+@app.route('/cart/delete', methods=['DELETE'])
+def delete_cart_item():
+    data = request.json
+    user_email = data['user_email']
+    meal_name = data['meal_name']
+
+    cursor = mysql.connection.cursor()
+    cursor.execute(
+        "DELETE FROM cart WHERE user_email = %s AND meal_name = %s",
+        (user_email, meal_name)
+    )
+    mysql.connection.commit()
+    return jsonify({"message": "Cart item deleted successfully"}), 200
+
 
 if __name__ == '__main__':
-    app.run(host='192.168.1.121', port=5000 , debug=True)
+    app.run(host='172.26.11.72', port=5000 , debug=True)
     #app.run(debug=True)

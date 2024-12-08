@@ -6,7 +6,7 @@ function Register({ closeModal }) {
     const [password, setPassword] = useState('');
 
     const handleRegister = () => {
-        axios.post('http://localhost:5000/register', { useremail, password })
+        axios.post('http://172.26.11.72:5000/register', { useremail, password })
             .then(() => {
                 alert("註冊成功！");
                 closeModal();
@@ -22,13 +22,13 @@ function Register({ closeModal }) {
                 placeholder="用戶email"
                 value={useremail}
                 onChange={(e) => setUseremail(e.target.value)}
-            />
+            /><br></br>
             <input
                 type="password"
                 placeholder="密碼"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-            />
+            /><br></br>
             <button onClick={handleRegister}>註冊</button>
         </div>
     );

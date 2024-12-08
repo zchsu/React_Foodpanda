@@ -24,7 +24,14 @@ function Menu() {
             .get(`http://${hostServer}/menu?restaurant_name=${restaurantName}`)
             .then((response) => setMenuItems(response.data))
             .catch((error) => console.error('Error fetching menu:', error));
-    }, [restaurantName]);
+
+        if (user) {
+            axios
+                .get(`http://${hostServer}/cart?user_email=${user}`)
+                .then((response) => setCartItems(response.data))
+                .catch((error) => console.error('Error fetching cart:', error));
+        }
+    }, [restaurantName, user]);
 
     const handleAddToCart = (meal) => {
         if (!user) {
@@ -54,6 +61,45 @@ function Menu() {
             .catch((error) => {
                 console.error('Error adding to cart:', error);
                 alert('加入購物車失敗');
+            });
+    };
+
+    const handleUpdateCartItem = (index, newAmount) => {
+        if (newAmount < 1) return; // 確保數量不能小於 1
+        const cartItem = cartItems[index];
+        axios
+            .put(`http://${hostServer}/cart/update`, {
+                user_email: user,
+                meal_name: cartItem.meal_name,
+                amount: newAmount,
+            })
+            .then(() => {
+                const updatedCart = [...cartItems];
+                updatedCart[index].amount = newAmount;
+                setCartItems(updatedCart);
+            })
+            .catch((error) => {
+                console.error('Error updating cart item:', error);
+                alert('更新購物車失敗');
+            });
+    };
+
+    const handleDeleteCartItem = (index) => {
+        const cartItem = cartItems[index];
+        axios
+            .delete(`http://${hostServer}/cart/delete`, {
+                data: {
+                    user_email: user,
+                    meal_name: cartItem.meal_name,
+                },
+            })
+            .then(() => {
+                const updatedCart = cartItems.filter((_, i) => i !== index);
+                setCartItems(updatedCart);
+            })
+            .catch((error) => {
+                console.error('Error deleting cart item:', error);
+                alert('刪除購物車失敗');
             });
     };
 
@@ -113,9 +159,31 @@ function Menu() {
                             {cartItems.map((item, index) => (
                                 <li key={index} className="cart-item">
                                     <h4>{item.meal_name}</h4>
-                                    <p>數量: {item.amount}</p>
+                                    <br></br>
                                     <p>備註: {item.content}</p>
                                     <p>價格: ${item.meal_price * item.amount}</p>
+                                    <div className="item-actions">
+                                        <label>
+                                            數量:
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                value={item.amount}
+                                                onChange={(e) =>
+                                                    handleUpdateCartItem(
+                                                        index,
+                                                        parseInt(e.target.value, 10)
+                                                    )
+                                                }
+                                            />
+                                        </label>
+                                        <button
+                                            className="delete-button"
+                                            onClick={() => handleDeleteCartItem(index)}
+                                        >
+                                            刪除
+                                        </button>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
@@ -130,20 +198,23 @@ function Menu() {
                                 checked={needUtensils}
                                 onChange={(e) => setNeedUtensils(e.target.checked)}
                             />
-                            需要餐具<br></br><br></br>
+                            需要餐具
                         </label>
-                        <button 
+                        <br />
+                        <button
                             className="checkout-button"
                             onClick={() =>
-                                navigate('/payment', { state: { cartItems } })
+                                navigate('/payment', { state: { cartItems, deliveryOption, needUtensils } })
                             }
-                        >查看付款方式及地址</button>
+                        >
+                            查看付款方式及地址
+                        </button>
                     </div>
                 </div>
             </div>
 
             {/* Footer */}
-            <footer>© 2024 foodpanda. All rights reserved.</footer>
+            <footer>© 2024 foodpanda. 軟體工程.</footer>
 
             {showModal && (
                 <div className="modal-overlay">

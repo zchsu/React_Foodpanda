@@ -6,7 +6,7 @@ function Login({ closeModal, setUser }) {
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
-        axios.post('http://192.168.1.121:5000/login', { useremail, password })
+        axios.post('http://172.26.11.72:5000/login', { useremail, password })
             .then(() => {
                 alert("登入成功！");
                 setUser(useremail); // 設定使用者狀態
@@ -23,13 +23,13 @@ function Login({ closeModal, setUser }) {
                 placeholder="用戶email"
                 value={useremail}
                 onChange={(e) => setUseremail(e.target.value)}
-            />
+            /><br></br>
             <input
                 type="password"
                 placeholder="密碼"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-            />
+            /><br></br>
             <button onClick={handleLogin}>登入</button>
         </div>
     );

@@ -5,6 +5,8 @@ import './Payment.css';
 function Payment() {
     const location = useLocation(); // 使用 useLocation 獲取 location
     const cartItems = location.state?.cartItems || []; // 預設為空陣列，避免錯誤
+    const deliveryOption = location.state?.deliveryOption || 'delivery'; // 預設值
+    const needUtensils = location.state?.needUtensils || false; // 預設為不需要餐具
     const [deliveryAddress, setDeliveryAddress] = useState(''); // 預設為空字串
     const [paymentMethod, setPaymentMethod] = useState('credit_card');
 
@@ -42,6 +44,7 @@ function Payment() {
     return (
         <div className="payment-page">
             <h2>確認訂單</h2>
+
             <div className="address-section">
                 <h3>送餐地址</h3>
                 <p>{deliveryAddress || '尚未提供地址'}</p>
@@ -49,6 +52,13 @@ function Payment() {
                     更新地址
                 </button>
             </div>
+
+            {/* 顯示外送/外帶選項 */}
+            <div className="delivery-option-section">
+                <h3>配送方式</h3>
+                <p>{deliveryOption === 'delivery' ? '外送' : '外帶自取'}</p>
+            </div>
+
             <div className="cart-summary">
                 <h3>您的訂單</h3>
                 <ul>
@@ -62,6 +72,13 @@ function Payment() {
                 </ul>
                 <h4>總計: ${calculateTotal()}</h4>
             </div>
+
+            {/* 顯示是否需要餐具 */}
+            <div className="utensils-section">
+                <h3>餐具需求</h3>
+                <p>{needUtensils ? '需要提供餐具' : '不需要餐具'}</p>
+            </div>
+
             <div className="payment-method">
                 <h3>選擇付款方式</h3>
                 <label>

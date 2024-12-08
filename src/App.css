@@ -26,6 +26,20 @@ header .button-group {
   gap: 10px;
 }
 
+/* Hi, {user} 文字樣式 */
+.button-group p {
+  margin: 0;
+  padding: 8px 12px;
+  background-color: #fff; /* 白色背景 */
+  color: #e21b70; /* 主題色調 */
+  border-radius: 20px; /* 圓角 */
+  font-size: 0.9rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+  text-align: center;
+  line-height: 1;
+}
+
 header .button-group button {
   padding: 5px 15px;
   border-radius: 20px;
@@ -116,8 +130,8 @@ main {
 /* Footer content (now a div) */
 .footer-content {
   text-align: center;
-  background-color: #e21b70;
-  color: #fff;
+  background-color: #ffffff;
+  color: #0a0101;
   padding: 10px 0;
   left: 0;
   right: 0;
@@ -265,7 +279,7 @@ main {
 
 .modal-content input:focus,
 .modal-content textarea:focus {
-  border-color: #007bff; /* 聚焦時的藍色邊框 */
+  border-color: #e21b70; /* 聚焦時的藍色邊框 */
 }
 
 /* 按鈕樣式 */
