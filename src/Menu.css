@@ -143,5 +143,25 @@ footer {
 h3, h2 {
     margin: 10px 0;
 }
+.delivery-options {
+    margin-bottom: 1em;
+}
+
+.utensils-option {
+    margin: 1em 0;
+}
+
+.checkout-button {
+    padding: 0.5em 1em;
+    background-color: #E21B70;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.checkout-button:hover {
+    background-color:#b71b5e;
+}
 
 

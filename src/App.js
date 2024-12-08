@@ -13,8 +13,8 @@ function App() {
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [location, setLocation] = useState(null); 
-    const [user, setUser] = useState(null); // 新增登入狀態
+    const [location, setLocation] = useState(null);
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     const cities = [
@@ -71,14 +71,14 @@ function App() {
                 (position) => {
                     const { latitude, longitude } = position.coords;
                     setLocation({ latitude, longitude });
-    
+
                     const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
                     axios
                         .get(url)
                         .then((response) => {
                             const address = `${response.data.address.city || ''}${response.data.address.town || ''}${response.data.address.road || ''}`;
                             console.log('User address:', address);
-                            setSearch(address); // 設定輸入框內容
+                            setSearch(address);
                         })
                         .catch((error) => {
                             console.error('Error with reverse geocoding:', error);
@@ -95,17 +95,16 @@ function App() {
 
     const handleNavigateToMenu = (restaurantName) => {
         if (!user) {
-            alert("請先登入！");
+            alert('請先登入！');
             setShowModal(true);
             setModalType('login');
             return;
         }
-        navigate(`/menu/${restaurantName}`);
+        navigate(`/menu/${restaurantName}`, { state: { user } });
     };
 
     return (
         <div>
-            {/* Header */}
             <header>
                 <h1>foodpanda</h1>
                 <div className="button-group">
@@ -124,24 +123,23 @@ function App() {
                 </div>
             </header>
 
-            {/* Main */}
             <main>
                 <div className="content">
                     <div className="background">
                         <div className="search-container">
                             <div className="search-input-wrapper">
                                 <input
-                                  type="text"
-                                  placeholder="輸入你欲送達的地址"
-                                  value={search}
-                                  onChange={(e) => setSearch(e.target.value)}
+                                    type="text"
+                                    placeholder="輸入你欲送達的地址"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
                                 />
-                                <button className="location-button" onClick={getlocation}>📍</button>
-                                
+                                <button className="location-button" onClick={getlocation}>
+                                    📍
+                                </button>
                             </div>
                             <button onClick={handleSearchRestaurants}>搜尋美食</button>
                         </div>
-
                     </div>
                     {isLoading ? (
                         <p>正在加載...</p>
@@ -167,7 +165,7 @@ function App() {
                     )}
                 </div>
             </main>
-
+            
             {/* Cities */}
             <div className="city-section">
                 <h3>我們有在您的城市提供送餐服務!</h3>
@@ -189,10 +187,8 @@ function App() {
             </div>
 
             {/* Footer */}
-            
             <div className="footer-content">© 2024 foodpanda. 軟體工程</div>
 
-            {/* Modal */}
             {showModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">
