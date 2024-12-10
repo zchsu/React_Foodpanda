@@ -20,7 +20,7 @@ function Login({ closeModal, setUser }) {
             <h2>登入</h2>
             <input
                 type="text"
-                placeholder="用戶email"
+                placeholder="用戶名稱"
                 value={useremail}
                 onChange={(e) => setUseremail(e.target.value)}
             /><br></br>

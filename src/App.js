@@ -31,6 +31,13 @@ function App() {
         localStorage.setItem('user', JSON.stringify(userInfo)); // Save user info to localStorage
     };
 
+    // Handle user logout
+    const handleLogout = () => {
+        setUser(null);
+        localStorage.removeItem('user'); // Clear user info from localStorage
+        navigate('/'); // Redirect to home page
+    };
+
     const cities = [
         { name: '台北市', image: '/images/台北市.png' },
         { name: '新北市', image: '/images/新北市.png' },
@@ -123,7 +130,12 @@ function App() {
                 <h1>foodpanda</h1>
                 <div className="button-group">
                     {user ? (
-                        <p>Hi, {user}</p>
+                        <>
+                            <p>Hi, {user}</p>
+                            <button className="logout-button" onClick={handleLogout}>
+                                登出
+                            </button>
+                        </>
                     ) : (
                         <>
                             <button className="login-button" onClick={() => handleOpenModal('login')}>
@@ -173,7 +185,7 @@ function App() {
                                     </div>
                                 ))
                             ) : (
-                                <p>找不到餐廳</p>
+                                <p>請輸入地址搜尋餐廳</p>
                             )}
                         </div>
                     )}
