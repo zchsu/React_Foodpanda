@@ -6,6 +6,7 @@ import Register from './Register';
 import Login from './Login';
 import Menu from './Menu'; 
 import Payment from './Payment';
+import OrderSummary from './OrderSummary';
 
 ReactDOM.render(
     <Router>
@@ -15,6 +16,7 @@ ReactDOM.render(
             <Route path="/login" element={<Login />} />
             <Route path="/menu/:restaurantName" element={<Menu />} /> {/* 新增路由 */}
             <Route path="/payment" element={<Payment />} />
+            <Route path="/order-summary" element={<OrderSummary />} />
         </Routes>
     </Router>,
     document.getElementById('root')

@@ -17,6 +17,20 @@ function App() {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
+    // Check if user is logged in on component mount
+    useEffect(() => {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+            setUser(JSON.parse(savedUser)); // Set the user from localStorage
+        }
+    }, []);
+
+    // Store user to localStorage on login
+    const handleUserLogin = (userInfo) => {
+        setUser(userInfo);
+        localStorage.setItem('user', JSON.stringify(userInfo)); // Save user info to localStorage
+    };
+
     const cities = [
         { name: '台北市', image: '/images/台北市.png' },
         { name: '新北市', image: '/images/新北市.png' },
@@ -50,8 +64,11 @@ function App() {
     const handleSearchRestaurants = () => {
         if (!search) return;
         setIsLoading(true);
+        const cityAndTown = search.match(/^(.*?市|縣).*?(區|鎮|鄉)/); 
+        const simplifiedSearch = cityAndTown ? cityAndTown[0] : search;
+
         axios
-            .get(`http://${hostServer}/restaurants/search?address=${search}`)
+            .get(`http://${hostServer}/restaurants/search?address=${simplifiedSearch}`)
             .then((response) => {
                 setRestaurants(response.data);
                 setIsLoading(false);
@@ -97,7 +114,7 @@ function App() {
             setModalType('login');
             return;
         }
-        navigate(`/menu/${restaurantName}`, { state: { user } });
+        navigate(`/menu/${restaurantName}`, { state: { user, address: search} });
     };
 
     return (
@@ -193,7 +210,7 @@ function App() {
                             ✕
                         </button>
                         {modalType === 'login' ? (
-                            <Login closeModal={handleCloseModal} setUser={setUser} />
+                            <Login closeModal={handleCloseModal} setUser={handleUserLogin} />
                         ) : (
                             <Register closeModal={handleCloseModal} />
                         )}

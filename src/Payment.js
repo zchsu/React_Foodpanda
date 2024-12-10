@@ -1,44 +1,48 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';  // 引入 useNavigate
 import './Payment.css';
 
 function Payment() {
-    const location = useLocation(); // 使用 useLocation 獲取 location
-    const cartItems = location.state?.cartItems || []; // 預設為空陣列，避免錯誤
-    const deliveryOption = location.state?.deliveryOption || 'delivery'; // 預設值
-    const needUtensils = location.state?.needUtensils || false; // 預設為不需要餐具
-    const [deliveryAddress, setDeliveryAddress] = useState(''); // 預設為空字串
+    const location = useLocation();
+    const navigate = useNavigate();  // 初始化 navigate 用於頁面跳轉
+    const user = location.state?.user || null;
+    const originalAddress = location.state?.address || '';
+    const cartItems = location.state?.cartItems || [];
+    const deliveryOption = location.state?.deliveryOption || 'delivery';
+    const needUtensils = location.state?.needUtensils || false;
+    const [deliveryAddress, setDeliveryAddress] = useState(originalAddress);
+    const [isEditing, setIsEditing] = useState(false);
+    const [newAddress, setNewAddress] = useState(originalAddress);
     const [paymentMethod, setPaymentMethod] = useState('credit_card');
 
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + item.meal_price * item.amount, 0);
     };
 
-    const handleUpdateAddress = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
-                    fetch(url)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            const address = `${data.address.city || ''}${data.address.town || ''}${data.address.road || ''}`;
-                            setDeliveryAddress(address || '無法取得地址');
-                        })
-                        .catch((error) => {
-                            console.error('Error with reverse geocoding:', error);
-                            alert('無法更新地址，請稍後再試！');
-                        });
-                },
-                (error) => {
-                    console.error('Error getting location:', error);
-                    alert('無法取得定位，請檢查定位服務是否開啟！');
-                }
-            );
-        } else {
-            alert('此瀏覽器不支援定位功能！');
-        }
+    const handleEditAddress = () => {
+        setIsEditing(true);
+    };
+
+    const handleSaveAddress = () => {
+        setDeliveryAddress(newAddress);
+        setIsEditing(false);
+    };
+
+    const handleChangeAddress = (event) => {
+        setNewAddress(event.target.value);
+    };
+
+    const handleConfirmOrder = () => {
+        // 傳遞訂單資料並跳轉至 OrderSummary 頁面
+        const orderDetails = {
+            user,
+            deliveryAddress,
+            cartItems,
+            paymentMethod,
+            deliveryOption,
+            needUtensils,
+        };
+        navigate('/order-summary', { state: orderDetails });  // 使用 navigate 進行頁面跳轉並傳遞資料
     };
 
     return (
@@ -47,13 +51,26 @@ function Payment() {
 
             <div className="address-section">
                 <h3>送餐地址</h3>
-                <p>{deliveryAddress || '尚未提供地址'}</p>
-                <button onClick={handleUpdateAddress} className="edit-address">
-                    更新地址
-                </button>
+                <p>{deliveryAddress}</p>
+                {!isEditing ? (
+                    <button onClick={handleEditAddress} className="edit-address">
+                        更改地址
+                    </button>
+                ) : (
+                    <div>
+                        <textarea
+                            value={newAddress}
+                            onChange={handleChangeAddress}
+                            rows="4"
+                            className="address-input"
+                        />
+                        <button onClick={handleSaveAddress} className="save-address">
+                            確認更改
+                        </button>
+                    </div>
+                )}
             </div>
 
-            {/* 顯示外送/外帶選項 */}
             <div className="delivery-option-section">
                 <h3>配送方式</h3>
                 <p>{deliveryOption === 'delivery' ? '外送' : '外帶自取'}</p>
@@ -73,7 +90,6 @@ function Payment() {
                 <h4>總計: ${calculateTotal()}</h4>
             </div>
 
-            {/* 顯示是否需要餐具 */}
             <div className="utensils-section">
                 <h3>餐具需求</h3>
                 <p>{needUtensils ? '需要提供餐具' : '不需要餐具'}</p>
@@ -100,7 +116,8 @@ function Payment() {
                     現金
                 </label>
             </div>
-            <button className="confirm-button" onClick={() => alert('訂單已確認！')}>
+
+            <button className="confirm-button" onClick={handleConfirmOrder}>
                 確認訂單
             </button>
         </div>

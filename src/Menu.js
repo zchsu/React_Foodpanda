@@ -9,6 +9,7 @@ function Menu() {
     const { restaurantName } = useParams();
     const location = useLocation();
     const user = location.state?.user || null;
+    const address = location.state?.address || '';
     const [menuItems, setMenuItems] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedMeal, setSelectedMeal] = useState(null);
@@ -27,7 +28,7 @@ function Menu() {
 
         if (user) {
             axios
-                .get(`http://${hostServer}/cart?user_email=${user}`)
+                .get(`http://${hostServer}/cart?user_email=${user}&restaurant_name=${restaurantName}`)
                 .then((response) => setCartItems(response.data))
                 .catch((error) => console.error('Error fetching cart:', error));
         }
@@ -204,7 +205,7 @@ function Menu() {
                         <button
                             className="checkout-button"
                             onClick={() =>
-                                navigate('/payment', { state: { cartItems, deliveryOption, needUtensils } })
+                                navigate('/payment', { state: { user, cartItems, deliveryOption, needUtensils, address } })
                             }
                         >
                             查看付款方式及地址

@@ -93,10 +93,11 @@ def add_to_cart():
 @app.route('/cart', methods=['GET'])
 def get_cart():
     user_email = request.args.get('user_email')
+    restaurant_name = request.args.get('restaurant_name')
     cursor = mysql.connection.cursor()
     cursor.execute(
-        "SELECT meal_name, amount, content FROM cart WHERE user_email = %s",
-        (user_email,)
+        "SELECT meal_name, amount, content FROM cart WHERE user_email = %s AND restaurant_name = %s",
+        (user_email, restaurant_name)
     )
     result = cursor.fetchall()
     cart_items = [{"meal_name": row[0], "amount": row[1], "content": row[2]} for row in result]
