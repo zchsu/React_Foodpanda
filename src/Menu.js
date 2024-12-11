@@ -214,8 +214,7 @@ function Menu() {
                 </div>
             </div>
 
-            {/* Footer */}
-            <footer>© 2024 foodpanda. 軟體工程.</footer>
+            
 
             {showModal && (
                 <div className="modal-overlay">

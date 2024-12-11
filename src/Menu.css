@@ -54,19 +54,6 @@ button.add-to-cart {
     cursor: pointer;
 }
 
-/* Footer */
-footer {
-    text-align: center;
-    background-color: #E21B70;
-    color: #fff;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-}
-
-
 .menu-page {
     display: flex;
     justify-content: space-between;

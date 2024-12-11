@@ -128,6 +128,38 @@ main {
   vertical-align: top; /* 確保與搜尋欄對齊 */
 }
 
+.restaurant-item {
+  padding: 15px;
+  margin: 10px 0;
+  border-bottom: 1px solid #ccc; /* 使用灰色線條分隔 */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.restaurant-item:hover {
+  background-color: #f9f9f9; /* 滑過時背景變淺 */
+}
+
+.restaurant-item h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.restaurant-item p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.no-results {
+  text-align: center;
+  color: #999;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+
 /* Footer content (now a div) */
 .footer-content {
   text-align: center;

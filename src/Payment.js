@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';  // 引入 useNavigate
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Payment.css';
 
 function Payment() {
     const location = useLocation();
-    const navigate = useNavigate();  // 初始化 navigate 用於頁面跳轉
+    const navigate = useNavigate();
     const user = location.state?.user || null;
     const originalAddress = location.state?.address || '';
     const cartItems = location.state?.cartItems || [];
@@ -32,17 +32,29 @@ function Payment() {
         setNewAddress(event.target.value);
     };
 
-    const handleConfirmOrder = () => {
-        // 傳遞訂單資料並跳轉至 OrderSummary 頁面
+    const handleConfirmOrder = async () => {
         const orderDetails = {
-            user,
+            user_email: user,
             deliveryAddress,
             cartItems,
             paymentMethod,
             deliveryOption,
             needUtensils,
+            orderTime: new Date().toISOString() // 記錄訂單時間
         };
-        navigate('/order-summary', { state: orderDetails });  // 使用 navigate 進行頁面跳轉並傳遞資料
+
+        // 發送訂單資料到後端
+        const response = await fetch('http://172.26.11.72:5000/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderDetails)
+        });
+
+        if (response.ok) {
+            navigate('/order-summary', { state: orderDetails });
+        } else {
+            alert('無法確認訂單，請稍後再試');
+        }
     };
 
     return (
@@ -52,6 +64,7 @@ function Payment() {
             <div className="address-section">
                 <h3>送餐地址</h3>
                 <p>{deliveryAddress}</p>
+                <br></br>
                 {!isEditing ? (
                     <button onClick={handleEditAddress} className="edit-address">
                         更改地址

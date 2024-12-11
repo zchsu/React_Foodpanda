@@ -1,0 +1,84 @@
+
+
+/* 頁面標題 */
+.order-history-page header {
+    background-color:  #e21b70;
+    color: white;
+    padding: 7px;
+    text-align: center;
+}
+
+/* 主內容區域 */
+.order-history-page main {
+    padding: 20px;
+    margin: 80px auto 0 auto;
+    max-width: 500px;
+}
+
+/* 訂單歷史容器 */
+.order-history-page .order-history {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 每一筆訂單 */
+.order-item {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* 訂單詳情 */
+.order-item p {
+    font-size: 1.1em;
+    color: #555;
+    margin: 8px 0;
+}
+
+/* 商品列表 */
+.order-item ul {
+    list-style: none;
+    padding-left: 0;
+    font-size: 1em;
+}
+
+/* 每個商品項目 */
+.order-item ul li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* 當訂單列表無項目時的訊息 */
+.order-history p {
+    font-size: 1.2em;
+    color: #888;
+    text-align: center;
+}
+
+/* 加載狀態樣式 */
+.order-history-page p {
+    text-align: center;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.order-history-page .back-button {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    position: absolute;
+    top: 20px;
+    right: 55px;
+}
+
+.order-history-page .back-button:hover {
+    background-color:  #cdcacb;
+}

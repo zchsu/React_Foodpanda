@@ -7,6 +7,7 @@ import Login from './Login';
 import Menu from './Menu'; 
 import Payment from './Payment';
 import OrderSummary from './OrderSummary';
+import OrderHistory from './OrderHistory';
 
 ReactDOM.render(
     <Router>
@@ -17,6 +18,7 @@ ReactDOM.render(
             <Route path="/menu/:restaurantName" element={<Menu />} /> {/* 新增路由 */}
             <Route path="/payment" element={<Payment />} />
             <Route path="/order-summary" element={<OrderSummary />} />
+            <Route path="/order-history" element={<OrderHistory />} />
         </Routes>
     </Router>,
     document.getElementById('root')

@@ -121,8 +121,14 @@ function App() {
             setModalType('login');
             return;
         }
-        navigate(`/menu/${restaurantName}`, { state: { user, address: search} });
+        navigate(`/menu/${restaurantName}`, { state: { user, address: search } });
     };
+
+    const handleNavigateToOrders = () => {
+        navigate('/order-history', { state: { user }});
+        console.log(user.email);
+    };
+    
 
     return (
         <div>
@@ -132,6 +138,9 @@ function App() {
                     {user ? (
                         <>
                             <p>Hi, {user}</p>
+                            <button className="cart-button" onClick={handleNavigateToOrders}>
+                                🛒 歷史訂單
+                            </button>
                             <button className="logout-button" onClick={handleLogout}>
                                 登出
                             </button>
@@ -185,13 +194,13 @@ function App() {
                                     </div>
                                 ))
                             ) : (
-                                <p>請輸入地址搜尋餐廳</p>
+                                <p className="no-results">請輸入地址搜尋餐廳</p>
                             )}
                         </div>
                     )}
                 </div>
             </main>
-            
+
             {/* Cities */}
             <div className="city-section">
                 <h3>我們有在您的城市提供送餐服務!</h3>
@@ -203,6 +212,7 @@ function App() {
                             onClick={() => {
                                 setSearch(city.name);
                                 handleSearchRestaurants();
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                         >
                             <img src={city.image} alt={city.name} />
