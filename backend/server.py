@@ -22,8 +22,9 @@ def register_user():
     data = request.json
     useremail = data['useremail']
     password = data['password']
+    name = data['name']
     cursor = mysql.connection.cursor()
-    cursor.execute("INSERT INTO user_info (user_email, password) VALUES (%s, %s)", (useremail, password))
+    cursor.execute("INSERT INTO user_info (user_email, password, user_name) VALUES (%s, %s, %s)", (useremail, password, name))
     mysql.connection.commit()
     return jsonify({"message": "User registered successfully"}), 201
 
@@ -34,12 +35,18 @@ def login_user():
     useremail = data['useremail']
     password = data['password']
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM user_info WHERE user_email = %s AND password = %s", (useremail, password))
+    cursor.execute("SELECT user_name, user_email FROM user_info WHERE user_email = %s AND password = %s", (useremail, password))
     user = cursor.fetchone()
     if user:
-        return jsonify({"message": "Login successful"}), 200
+        response = {
+            "user_name": user[0],  # 假設 user[0] 是 user_name
+            "user_email": user[1]  # 假設 user[1] 是 user_email
+        }
+        return jsonify(response), 200
     else:
         return jsonify({"message": "Invalid username or password"}), 401
+
+
 
 # 獲取餐廳
 @app.route('/restaurants', methods=['GET'])
@@ -222,5 +229,5 @@ def get_orders():
 
 
 if __name__ == '__main__':
-    app.run(host='172.26.11.72', port=5000 , debug=True)
-    #app.run(debug=True)
+    #app.run(host='172.26.11.72', port=5000 , debug=True)
+    app.run(debug=True)

@@ -62,6 +62,7 @@ button.add-to-cart {
 
 .menu-container {
     display: flex;
+    padding-top: 80px;
     width: 100%;
     justify-content: space-between;
 }
@@ -71,6 +72,7 @@ button.add-to-cart {
 }
 
 .cart-container {
+    container-type: inline-size;
     width: 30%;
     background-color: #f4f4f4;
     padding: 15px;
@@ -173,7 +175,7 @@ h3, h2 {
 /* 輸入框樣式 */
 .form-group input[type="number"],
 .form-group textarea {
-    width: 100%;
+    width: 90%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -249,7 +251,7 @@ h3, h2 {
     font-size: 1.5rem;
     color: #e21b70; /* 主題色調 */
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 /* 外送/自取選項樣式 */

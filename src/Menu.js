@@ -3,12 +3,13 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Menu.css';
 
-const hostServer = '172.26.11.72:5000';
+const hostServer = 'localhost:5000';
 
 function Menu() {
     const { restaurantName } = useParams();
     const location = useLocation();
     const user = location.state?.user || null;
+    console.log('User:', user);
     const address = location.state?.address || '';
     const [menuItems, setMenuItems] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -48,7 +49,7 @@ function Menu() {
             .post(`http://${hostServer}/cart`, {
                 restaurant_name: restaurantName,
                 meal_name: selectedMeal.meal_name,
-                user_email: user,
+                user_email: user.user,
                 content,
                 amount,
             })
@@ -110,6 +111,9 @@ function Menu() {
 
     return (
         <div className="menu-page">
+            <header>
+                <h1>foodpanda</h1>
+            </header>
             <div className="menu-container">
                 <div className="menu-list-container">
                     <h2>{restaurantName} 的菜單</h2>

@@ -20,7 +20,7 @@ const OrderHistory = () => {
 
         // 假設後端有 API 可以查詢該用戶的訂單歷史
         axios
-            .get(`http://172.26.11.72:5000/hisorders?user_email=${email}`)
+            .get(`http://localhost:5000/hisorders?user_email=${email.user}`)
             .then((response) => {
                 // 計算每筆訂單的總金額
                 const ordersWithTotal = response.data.orders.map((order) => {

@@ -6,21 +6,25 @@ function Login({ closeModal, setUser }) {
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
-        axios.post('http://172.26.11.72:5000/login', { useremail, password })
-            .then(() => {
+        axios.post('http://localhost:5000/login', { useremail, password })
+            .then((response) => {
+                console.log('Response data:', response.data); // 檢查回傳的資料
+                const { user_email, user_name } = response.data;
                 alert("登入成功！");
-                setUser(useremail); // 設定使用者狀態
+                setUser({ user: user_email, name: user_name }); // 傳遞完整的 user 資訊
                 closeModal();
             })
             .catch(() => alert("帳號或密碼錯誤"));
     };
+    
+    
 
     return (
         <div>
             <h2>登入</h2>
             <input
                 type="text"
-                placeholder="用戶名稱"
+                placeholder="用戶email"
                 value={useremail}
                 onChange={(e) => setUseremail(e.target.value)}
             /><br></br>

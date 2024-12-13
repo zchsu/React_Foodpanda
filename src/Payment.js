@@ -34,7 +34,7 @@ function Payment() {
 
     const handleConfirmOrder = async () => {
         const orderDetails = {
-            user_email: user,
+            user_email: user.user,
             deliveryAddress,
             cartItems,
             paymentMethod,
@@ -44,7 +44,7 @@ function Payment() {
         };
 
         // 發送訂單資料到後端
-        const response = await fetch('http://172.26.11.72:5000/orders', {
+        const response = await fetch('http://localhost:5000/orders', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(orderDetails)
@@ -95,6 +95,7 @@ function Payment() {
                     {cartItems.map((item, index) => (
                         <li key={index}>
                             <p>{item.meal_name}</p>
+                            <br></br>
                             <p>數量: {item.amount}</p>
                             <p>價格: ${item.meal_price * item.amount}</p>
                         </li>

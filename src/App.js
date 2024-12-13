@@ -5,7 +5,7 @@ import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 
-const hostServer = '172.26.11.72:5000';
+const hostServer = 'localhost:5000';
 
 function App() {
     const [restaurants, setRestaurants] = useState([]);
@@ -27,9 +27,14 @@ function App() {
 
     // Store user to localStorage on login
     const handleUserLogin = (userInfo) => {
+        console.log('User info received:', userInfo); // 確認完整物件內容
+        if (!userInfo.user || !userInfo.name) {
+            console.error('User info missing required fields:', userInfo);
+        }
         setUser(userInfo);
-        localStorage.setItem('user', JSON.stringify(userInfo)); // Save user info to localStorage
+        localStorage.setItem('user', JSON.stringify(userInfo)); // 儲存至 localStorage
     };
+    
 
     // Handle user logout
     const handleLogout = () => {
@@ -126,7 +131,6 @@ function App() {
 
     const handleNavigateToOrders = () => {
         navigate('/order-history', { state: { user }});
-        console.log(user.email);
     };
     
 
@@ -137,7 +141,7 @@ function App() {
                 <div className="button-group">
                     {user ? (
                         <>
-                            <p>Hi, {user}</p>
+                            <p>Hi, {user.name}</p>
                             <button className="cart-button" onClick={handleNavigateToOrders}>
                                 🛒 歷史訂單
                             </button>
