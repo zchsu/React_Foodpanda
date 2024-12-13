@@ -1,0 +1,99 @@
+/* RestaurantList.css */
+.listheader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #E21B70;
+    padding: 10px 20px;
+    z-index: 1000;
+}
+
+.listheader h1 {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+
+/* 確保餐廳列表區域有足夠的空間，避免被 header 擋住 */
+.restaurant-list-container {
+    padding-top: 120px; /* 增加 padding-top，確保不被 header 擋住 */
+    display: flex;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.filter-container {
+    padding-top: 20px; /* 略微調整 padding-top */
+    width: 20%;
+    padding: 15px;
+    background-color: #fff;
+    border-right: 2px solid #ddd;
+}
+
+.filter-container h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkbox-group label {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input {
+    margin-right: 10px;
+}
+
+.restaurants-list {
+    width: 80%;
+    padding: 15px;
+}
+
+.restaurants-list h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.restaurant-item {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.restaurant-item:hover {
+    transform: scale(1.05);
+}
+
+.restaurant-item h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.restaurant-item p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.no-results {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
+}

@@ -94,20 +94,9 @@ function App() {
 
     const handleSearchRestaurants = () => {
         if (!search) return;
-        setIsLoading(true);
-        const cityAndTown = search.match(/^(.*?市|縣).*?(區|鎮|鄉)/); 
-        const simplifiedSearch = cityAndTown ? cityAndTown[0] : search;
 
-        axios
-            .get(`http://${hostServer}/restaurants/search?address=${simplifiedSearch}`)
-            .then((response) => {
-                setRestaurants(response.data);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error searching restaurants:', error);
-                setIsLoading(false);
-            });
+        // 導航到餐廳列表頁面，並將搜尋的地址傳遞過去
+        navigate('/restaurants', { state: { user, address: search } });
     };
 
     const getlocation = () => {
@@ -201,28 +190,7 @@ function App() {
                             <button onClick={handleSearchRestaurants}>搜尋美食</button>
                         </div>
                     </div>
-                    {isLoading ? (
-                        <p>正在加載...</p>
-                    ) : (
-                        <div>
-                            {restaurants.length > 0 ? (
-                                restaurants.map((restaurant) => (
-                                    <div
-                                        key={restaurant.name}
-                                        onClick={() => handleNavigateToMenu(restaurant.name)}
-                                        className="restaurant-item"
-                                    >
-                                        <h2>{restaurant.name}</h2>
-                                        <p>描述: {restaurant.description}</p>
-                                        <p>地址: {restaurant.address}</p>
-                                        <p>電話: {restaurant.phone}</p>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="no-results">請輸入地址搜尋餐廳</p>
-                            )}
-                        </div>
-                    )}
+                    
                 </div>
             </main>
 

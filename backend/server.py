@@ -99,10 +99,20 @@ def get_restaurants():
 @app.route('/restaurants/search', methods=['GET'])
 def search_restaurants():
     address = request.args.get('address', '')
+    category = request.args.get('category', '')  # 新增類別過濾
+    query = "SELECT restaurant_name, restaurant_address, restaurant_desc, restaurant_phone FROM restaurant WHERE restaurant_address LIKE %s"
+    params = ['%' + address + '%']
+
+    if category:
+        query += " AND restaurant_desc LIKE %s"
+        params.append('%' + category + '%')
+
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT restaurant_name, restaurant_address, restaurant_desc, restaurant_phone FROM restaurant WHERE restaurant_address LIKE %s", ('%' + address + '%',))
+    cursor.execute(query, tuple(params))
     result = cursor.fetchall()
     restaurants = [{"name": row[0], "address": row[1], "description": row[2], "phone": row[3]} for row in result]
+    return jsonify(restaurants)
+
     return jsonify(restaurants)
 
 #獲取菜單
@@ -187,6 +197,7 @@ def delete_cart_item():
 def create_order():
     data = request.json
     user_email = data['user_email']
+    payer_name = data['payer_name']  # 新增付款人姓名
     delivery_address = data['deliveryAddress']
     cart_items = data['cartItems']
     payment_method = data['paymentMethod']
@@ -196,13 +207,13 @@ def create_order():
 
     cursor = mysql.connection.cursor()
 
-    # 插入訂單主資料
+    # 插入訂單主資料，包括付款人姓名
     cursor.execute(
         """
-        INSERT INTO orders (user_email, delivery_address, payment_method, delivery_option, need_utensils, order_time)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO orders (user_email, payer, delivery_address, payment_method, delivery_option, need_utensils, order_time)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """,
-        (user_email, delivery_address, payment_method, delivery_option, need_utensils, order_time)
+        (user_email, payer_name, delivery_address, payment_method, delivery_option, need_utensils, order_time)
     )
     order_id = cursor.lastrowid  # 獲取新插入訂單的 ID
 

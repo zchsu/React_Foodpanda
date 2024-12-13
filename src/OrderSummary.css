@@ -149,3 +149,22 @@
     background-color: #a81856;
     transform: scale(1.05);
 }
+
+
+.order-progress {
+    width: 100%;
+    height: 20px;
+    margin-top: 20px;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    appearance: none;
+}
+
+.order-progress::-webkit-progress-bar {
+    background-color: #f3f3f3;
+}
+
+.order-progress::-webkit-progress-value {
+    background-color:#e21b70; /* 進度條的顏色 */
+    border-radius: 5px;
+}

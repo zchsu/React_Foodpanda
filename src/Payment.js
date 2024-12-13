@@ -14,6 +14,9 @@ function Payment() {
     const [isEditing, setIsEditing] = useState(false);
     const [newAddress, setNewAddress] = useState(originalAddress);
     const [paymentMethod, setPaymentMethod] = useState('credit_card');
+    const [payerName, setPayerName] = useState(user?.name || ''); // 預設為當前使用者的名字
+    const [isEditingPayer, setIsEditingPayer] = useState(false);
+    const [newPayerName, setNewPayerName] = useState(payerName);
 
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + item.meal_price * item.amount, 0);
@@ -30,11 +33,26 @@ function Payment() {
 
     const handleChangeAddress = (event) => {
         setNewAddress(event.target.value);
+        console.log(event.target.value);
+    };
+
+    const handleEditPayerName = () => {
+        setIsEditingPayer(true);
+    };
+
+    const handleSavePayerName = () => {
+        setPayerName(newPayerName);
+        setIsEditingPayer(false);
+    };
+
+    const handleChangePayerName = (event) => {
+        setNewPayerName(event.target.value);
     };
 
     const handleConfirmOrder = async () => {
         const orderDetails = {
             user_email: user.user,
+            payer_name: payerName,  // 新增付款人姓名
             deliveryAddress,
             cartItems,
             paymentMethod,
@@ -51,6 +69,7 @@ function Payment() {
         });
 
         if (response.ok) {
+            console.log(orderDetails.payer_name);
             navigate('/order-summary', { state: orderDetails });
         } else {
             alert('無法確認訂單，請稍後再試');
@@ -78,6 +97,30 @@ function Payment() {
                             className="address-input"
                         />
                         <button onClick={handleSaveAddress} className="save-address">
+                            確認更改
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            {/* 付款人姓名區塊 */}
+            <div className="payer-section">
+                <h3>付款人姓名</h3>
+                <p>{payerName}</p>
+                <br></br>
+                {!isEditingPayer ? (
+                    <button onClick={handleEditPayerName} className="edit-payer">
+                        更改付款人姓名
+                    </button>
+                ) : (
+                    <div>
+                        <input
+                            type="text"
+                            value={newPayerName}
+                            onChange={handleChangePayerName}
+                            className="payer-name-input"
+                        />
+                        <button onClick={handleSavePayerName} className="save-payer-name">
                             確認更改
                         </button>
                     </div>
