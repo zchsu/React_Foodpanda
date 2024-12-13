@@ -15,6 +15,7 @@ function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [location, setLocation] = useState(null);
     const [user, setUser] = useState(null);
+    const [userNameInput, setUserNameInput] = useState(''); // 儲存新用戶名稱輸入
     const navigate = useNavigate();
 
     // Check if user is logged in on component mount
@@ -41,6 +42,24 @@ function App() {
         setUser(null);
         localStorage.removeItem('user'); // Clear user info from localStorage
         navigate('/'); // Redirect to home page
+    };
+
+    const handleUpdateUserName = () => {
+        if (!userNameInput) return;
+    
+        axios
+            .post(`http://${hostServer}/update_username`, { email: user.user, name: userNameInput })
+            .then((response) => {
+                setUser({ ...user, name: userNameInput });
+                localStorage.setItem('user', JSON.stringify({ ...user, name: userNameInput }));
+                alert('用戶名稱已更新！');
+                console.log()
+                handleCloseModal();
+            })
+            .catch((error) => {
+                console.error('更新用戶名稱失敗:', error);
+                alert('更新失敗，請稍後再試。');
+            });
     };
 
     const cities = [
@@ -102,7 +121,7 @@ function App() {
                     axios
                         .get(url)
                         .then((response) => {
-                            const address = `${response.data.address.city || ''}${response.data.address.town || ''}${response.data.address.road || ''}`;
+                            const address = `${response.data.address.city || ''}${response.data.address.town || ''}${response.data.address.road || ''}${response.data.address.house_number || ''}`;
                             console.log('User address:', address);
                             setSearch(address);
                         })
@@ -141,7 +160,9 @@ function App() {
                 <div className="button-group">
                     {user ? (
                         <>
-                            <p>Hi, {user.name}</p>
+                            <button onClick={() => handleOpenModal('updateName')}>
+                                Hi, {user.name}
+                            </button>
                             <button className="cart-button" onClick={handleNavigateToOrders}>
                                 🛒 歷史訂單
                             </button>
@@ -230,19 +251,33 @@ function App() {
             <div className="footer-content">© 2024 foodpanda. 軟體工程</div>
 
             {showModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <button className="close-button" onClick={handleCloseModal}>
-                            ✕
-                        </button>
-                        {modalType === 'login' ? (
-                            <Login closeModal={handleCloseModal} setUser={handleUserLogin} />
-                        ) : (
-                            <Register closeModal={handleCloseModal} />
-                        )}
-                    </div>
+    <div className="modal-overlay">
+        <div className="modal-content">
+            <button className="close-button" onClick={handleCloseModal}>
+                ✕
+            </button>
+            {modalType === 'login' ? (
+                <Login closeModal={handleCloseModal} setUser={handleUserLogin} />
+            ) : modalType === 'register' ? (
+                <Register closeModal={handleCloseModal} />
+            ) : modalType === 'updateName' ? (
+                <div>
+                    <h3>更新用戶名稱</h3>
+                    <input
+                        type="text"
+                        placeholder="輸入新用戶名稱"
+                        value={userNameInput}
+                        onChange={(e) => setUserNameInput(e.target.value)}
+                    />
+                    <button onClick={handleUpdateUserName}>確認</button>
+                    <button onClick={handleCloseModal}>取消</button>
                 </div>
-            )}
+            ) : null}
+        </div>
+    </div>
+)}
+
+            
         </div>
     );
 }

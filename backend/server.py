@@ -46,6 +46,44 @@ def login_user():
     else:
         return jsonify({"message": "Invalid username or password"}), 401
 
+# 密碼重置
+@app.route('/reset_password', methods=['POST'])
+def reset_password():
+    data = request.json
+    useremail = data['useremail']
+    new_password = data['newPassword']
+    
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT user_email FROM user_info WHERE user_email = %s", (useremail,))
+    user = cursor.fetchone()
+    
+    if user:
+        cursor.execute(
+            "UPDATE user_info SET password = %s WHERE user_email = %s",
+            (new_password, useremail)
+        )
+        mysql.connection.commit()
+        return jsonify({"message": "Password reset successfully"}), 200
+    else:
+        return jsonify({"message": "Email not found"}), 404
+
+@app.route('/update_username', methods=['POST'])
+def update_username():
+    data = request.json
+    email = data.get('email')
+    new_name = data.get('name')
+
+    if not email or not new_name:
+        return jsonify({"error": "缺少必要參數"}), 400
+
+    try:
+        cursor = mysql.connection.cursor()
+        query = "UPDATE user_info SET user_name = %s WHERE user_email = %s"
+        cursor.execute(query, (new_name, email))
+        mysql.connection.commit()
+        return jsonify({"message": "用戶名稱更新成功"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 # 獲取餐廳
