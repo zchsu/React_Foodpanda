@@ -110,9 +110,10 @@ function App() {
                     axios
                         .get(url)
                         .then((response) => {
-                            const address = `${response.data.address.city || ''}${response.data.address.town || ''}${response.data.address.road || ''}${response.data.address.house_number || ''}`;
+                            const address = `${response.data.address.city || ''}${response.data.address.town || ''}${response.data.address.road || ''}${response.data.address.house_number ? response.data.address.house_number + '號' : ''}`;
                             console.log('User address:', address);
                             setSearch(address);
+
                         })
                         .catch((error) => {
                             console.error('Error with reverse geocoding:', error);

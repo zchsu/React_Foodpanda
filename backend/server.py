@@ -16,17 +16,32 @@ app.config['MYSQL_DB'] = 'foodpanda_db2'
 
 mysql = MySQL(app)
 
-# 註冊用戶
 @app.route('/register', methods=['POST'])
 def register_user():
     data = request.json
-    useremail = data['useremail']
-    password = data['password']
-    name = data['name']
+    useremail = data.get('useremail', '')
+    password = data.get('password', '')
+    name = data.get('name', '')
+
+    # 後端驗證
+    if '@' not in useremail:
+        return jsonify({"error": "Email 不正確"}), 400
+    if len(password) < 8:
+        return jsonify({"error": "密碼必須至少包含 8 個字符"}), 400
+
+    # 插入資料庫
     cursor = mysql.connection.cursor()
-    cursor.execute("INSERT INTO user_info (user_email, password, user_name) VALUES (%s, %s, %s)", (useremail, password, name))
-    mysql.connection.commit()
+    try:
+        cursor.execute(
+            "INSERT INTO user_info (user_email, password, user_name) VALUES (%s, %s, %s)",
+            (useremail, password, name)
+        )
+        mysql.connection.commit()
+    except Exception as e:
+        return jsonify({"error": "註冊失敗，請稍後再試。", "details": str(e)}), 500
+
     return jsonify({"message": "User registered successfully"}), 201
+
 
 # 用戶登入
 @app.route('/login', methods=['POST'])
