@@ -10,47 +10,54 @@ function OrderSummary() {
 
     const [orderStatus, setOrderStatus] = useState('未送達'); // 初始訂單狀態是未送達
     const [progress, setProgress] = useState(0); // 進度條初始為 0%
+    const [deliveryTime, setDeliveryTime] = useState([40, 50]); // 初始預估外送時間範圍
 
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + item.meal_price * item.amount, 0);
     };
 
-    // 模擬預估外送時間
+    // 根據訂單狀態或剩餘時間顯示預估外送時間或"訂單已送達"
     const estimateDeliveryTime = () => {
-        const deliveryTimes = {
-            'delivery': '預計外送時間: 30-45 分鐘',
-            'pickup': '外帶自取時間: 15 分鐘'
-        };
-        return deliveryTimes[deliveryOption] || '未知';
+        if (orderStatus === '已送達') {
+            return '訂單已送達'; // 訂單送達時顯示該訊息
+        }
+        return `預計外送時間: ${deliveryTime[0]}-${deliveryTime[1]} 分鐘`;
     };
 
-    // 當組件掛載時，設定 5 秒後顯示已送達的狀態
     useEffect(() => {
-        const timer = setTimeout(() => {
-            // 訂單狀態在進度條完成後更新
+        // 訂單送達倒計時
+        const statusTimer = setTimeout(() => {
             if (progress === 100) {
                 setOrderStatus('已送達'); // 更新訂單狀態為已送達
                 alert('訂單已送達');
             }
-        }, 5000); // 5秒後顯示 alert 並更新狀態
+        }, 5000); // 5 秒後檢查是否完成
 
+        // 更新進度條和外送時間
         const progressTimer = setInterval(() => {
             setProgress((prev) => {
                 if (prev < 100) {
-                    return prev + 2; // 每 100ms 增加 2%（大約 5 秒完成）
+                    return prev + 20; // 每 100ms 增加 2%（大約 5 秒完成）
                 } else {
                     clearInterval(progressTimer); // 進度條完成後清除定時器
                     return 100;
                 }
             });
-        }, 100); // 每 100ms 更新一次進度條
 
-        // 清除定時器，防止組件卸載後仍然執行
+            setDeliveryTime((prev) => {
+                if (prev[0] > 0) {
+                    return [prev[0] - 10, prev[1] - 10]; // 每次減少 2 分鐘範圍
+                }
+                return prev;
+            });
+        }, 1000); // 每隔 1 秒更新一次時間範圍
+
+        // 清除定時器，防止內存泄露
         return () => {
-            clearTimeout(timer);
+            clearTimeout(statusTimer);
             clearInterval(progressTimer);
         };
-    }, [progress]); // 當 progress 更新時才會執行這個 effect
+    }, [progress]); // 當進度條或時間更新時執行
 
     const handleReturnHome = () => {
         navigate('/', { state: { user } }); // Passing the user state to the home page
@@ -67,15 +74,14 @@ function OrderSummary() {
 
                 {/* 進度條 */}
                 <progress value={progress} max="100" className="order-progress" />
-                {/*<p>進度: {progress}%</p>*/}
-                <br></br>
-                <br></br>
+                <br />
+                <br />
                 <h3>付款人姓名</h3>
                 <p>{payer_name}</p>
-                <br></br>
+                <br />
                 <h3>送餐地址</h3>
                 <p>{deliveryAddress}</p>
-                <br></br>
+                <br />
                 <h3>餐點清單</h3>
                 <ul>
                     {cartItems.map((item, index) => (
